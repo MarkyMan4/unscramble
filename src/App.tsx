@@ -5,7 +5,7 @@ import LetterData from './dataTypes/letterData'
 
 const getData = async (): Promise<any> => {
     return fetch(
-        'public/data/test.json', 
+        'data/test.json', 
         {
             headers: {
                 'Content-Type': 'application/json',
