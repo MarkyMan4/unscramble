@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
 // import LetterData from '../dataTypes/letterData'
 
-function Controls({centLetter, letters, checkWordCallback}: {centLetter: string, letters: string[], checkWordCallback: (word: string) => boolean} ) {
+function Controls({centLetter, letters, checkWordCallback}: {centLetter: string, letters: string[], checkWordCallback: (word: string) => void} ) {
     const [input, setInput] = useState('');
     const [centerLetter, setCenterLetter] = useState<string>('');
     const [outerLetters, setOuterLetters] = useState<string[]>();
-    // const [words, setWords] = useState<string[]>();
 
     useEffect(() => {
         setCenterLetter(centLetter)
         setOuterLetters(letters);
-        // setWords(letterData.words);
-    }, [centerLetter, outerLetters]);
+    }, [centLetter, letters]);
 
     const getFormattedInput = () => {
         return (
@@ -22,20 +20,13 @@ function Controls({centLetter, letters, checkWordCallback}: {centLetter: string,
     }
 
     const checkWord = () => {
-        let isCorrect = checkWordCallback(input);
-
-        if(isCorrect) {
-            alert('yea');
-        }
-        else {
-            alert('wrong');
-        }
-
+        checkWordCallback(input);
         setInput('');
     }
 
     return (
-        <div>
+        <div key={ centLetter }>
+            { getFormattedInput() }
             { outerLetters ? 
                 <div>
                     <div onClick={ () => setInput(input + outerLetters[0]) } className="letter-btn">{ outerLetters[0] }</div>
@@ -51,7 +42,6 @@ function Controls({centLetter, letters, checkWordCallback}: {centLetter: string,
                     <br />
                     <button onClick={ () => setInput('') } className="side-margins">clear</button>
                     <button onClick={ checkWord } className="side-margins">enter</button>
-                    { getFormattedInput() }
                 </div>
                 :
                 <div></div>
