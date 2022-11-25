@@ -27,6 +27,21 @@ function App() {
         getData().then(res => setData(res));
     }, [])
 
+    const checkWord = (word: string): boolean => {
+        if(data?.words?.includes(word.toUpperCase())) {
+            if(word.length === 4) {
+                setScore(score + 1);
+            }
+            else {
+                setScore(score + word.length);
+            }
+
+            return true;
+        }
+        
+        return false;
+    }
+
     return (
         <div>
             <h1>Score: { score }</h1>
@@ -34,7 +49,7 @@ function App() {
             <br />
             { data ? 
                 <div>
-                    <Controls centerLetter={ data.centerLetter } outerLetters={ data.outerLetters } words={ data.words } />
+                    <Controls centLetter={ data.centerLetter } letters={ data.outerLetters } checkWordCallback={ checkWord } />
                 </div>
                 :
                 <div></div>

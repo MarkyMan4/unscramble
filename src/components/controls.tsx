@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
-import LetterData from '../dataTypes/letterData'
+// import LetterData from '../dataTypes/letterData'
 
-function Controls(letterData: LetterData) {
+function Controls({centLetter, letters, checkWordCallback}: {centLetter: string, letters: string[], checkWordCallback: (word: string) => boolean} ) {
     const [input, setInput] = useState('');
     const [centerLetter, setCenterLetter] = useState<string>('');
     const [outerLetters, setOuterLetters] = useState<string[]>();
-    const [words, setWords] = useState<string[]>();
+    // const [words, setWords] = useState<string[]>();
 
     useEffect(() => {
-        setCenterLetter(letterData.centerLetter)
-        setOuterLetters(letterData.outerLetters);
-        setWords(letterData.words);
-    }, [letterData]);
+        setCenterLetter(centLetter)
+        setOuterLetters(letters);
+        // setWords(letterData.words);
+    }, [centerLetter, outerLetters]);
 
     const getFormattedInput = () => {
         return (
@@ -22,12 +22,13 @@ function Controls(letterData: LetterData) {
     }
 
     const checkWord = () => {
-        console.log(input);
-        if(words?.includes(input.toUpperCase())) {
+        let isCorrect = checkWordCallback(input);
+
+        if(isCorrect) {
             alert('yea');
         }
         else {
-            alert('not in word list');
+            alert('wrong');
         }
 
         setInput('');
