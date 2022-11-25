@@ -21,6 +21,7 @@ const getData = async (): Promise<any> => {
 
 function App() {
     const [data, setData] = useState<LetterData>();
+    const [score, setScore] = useState<number>(0);
 
     useEffect(() => {
         getData().then(res => setData(res));
@@ -28,8 +29,9 @@ function App() {
 
     return (
         <div>
-            <h1>Unscramble</h1>
+            <h1>Score: { score }</h1>
             <hr />
+            <br />
             { data ? 
                 <div>
                     <Controls centerLetter={ data.centerLetter } outerLetters={ data.outerLetters } words={ data.words } />

@@ -21,9 +21,20 @@ function Controls(letterData: LetterData) {
         );
     }
 
+    const checkWord = () => {
+        console.log(input);
+        if(words?.includes(input.toUpperCase())) {
+            alert('yea');
+        }
+        else {
+            alert('not in word list');
+        }
+
+        setInput('');
+    }
+
     return (
         <div>
-            { getFormattedInput() }
             { outerLetters ? 
                 <div>
                     <div onClick={ () => setInput(input + outerLetters[0]) } className="letter-btn">{ outerLetters[0] }</div>
@@ -38,7 +49,8 @@ function Controls(letterData: LetterData) {
                     <br />
                     <br />
                     <button onClick={ () => setInput('') } className="side-margins">clear</button>
-                    <button className="side-margins">enter</button>
+                    <button onClick={ checkWord } className="side-margins">enter</button>
+                    { getFormattedInput() }
                 </div>
                 :
                 <div></div>

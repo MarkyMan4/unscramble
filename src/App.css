@@ -24,11 +24,11 @@
 }
 
 .center-letter {
-  background-color: rgb(240, 216, 0);
+  background-color: rgb(154, 204, 250);
 }
 
 .center-letter:hover {
-  background-color: rgb(240, 216, 0, 0.6);  
+  background-color: rgb(154, 204, 250, 0.6);  
 }
 
 .user-input {
