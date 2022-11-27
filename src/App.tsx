@@ -43,7 +43,7 @@ function App() {
             document.cookie = serialize(
                 selectedPuzzleId, 
                 JSON.stringify({score: 0, words: []}),
-                {expires: new Date(2022, 11, 30)}
+                {expires: new Date(2100, 0, 1)}
             );
             console.log(serialize(
                 selectedPuzzleId, 
@@ -107,7 +107,7 @@ function App() {
             document.cookie = serialize(
                 selectedPuzzleId, 
                 JSON.stringify(puzzleData),
-                {expires: new Date(2022, 11, 30)}
+                {expires: new Date(2100, 0, 1)}
             );
 
             // add to correct guesses
