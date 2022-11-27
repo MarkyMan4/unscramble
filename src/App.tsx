@@ -110,6 +110,7 @@ function App() {
                 <option value="1650">1650</option>
                 <option value="1651">1651</option>
                 <option value="1658">1658</option>
+                <option value="1663">1663</option>
             </select>
 
             <h1 className="small-margin-bottom">Score: { score }</h1>
