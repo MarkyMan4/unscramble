@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Controls from './components/controls'
 import './App.css'
 import LetterData from './dataTypes/letterData'
+import { parse, serialize } from 'cookie';
 
 const getData = async (puzzleId: string): Promise<any> => {
     return fetch(
@@ -20,16 +21,27 @@ const getData = async (puzzleId: string): Promise<any> => {
 }
 
 function App() {
-    const [selectedPuzzled, setSelectedPuzzle] = useState<string>('1650');
+    const [selectedPuzzleId, setSelectedPuzzle] = useState<string>('1650');
     const [data, setData] = useState<LetterData>();
     const [score, setScore] = useState<number>(0);
     const [correctGuesses, setCorrectGuesses] = useState<string[]>([]);
 
     useEffect(() => {
-        getData(selectedPuzzled).then(res => setData(res));
+        getData(selectedPuzzleId).then(res => setData(res));
         setScore(0);
         setCorrectGuesses([]);
-    }, [selectedPuzzled])
+
+        let cookies = parse(document.cookie);
+        console.log(cookies);
+        if(selectedPuzzleId in cookies) {
+            let puzzleData = JSON.parse(cookies[selectedPuzzleId]);
+            setScore(puzzleData.score);
+            setCorrectGuesses(puzzleData.words);
+        }
+        else {
+            document.cookie = serialize(selectedPuzzleId, JSON.stringify({score: 0, words: []}));
+        }
+    }, [selectedPuzzleId])
 
     const isPangram = (word: string): boolean => {
         const charList = word.split('');
@@ -60,19 +72,29 @@ function App() {
             alert('missing center letter');
         }
         else if(data?.words?.includes(word)) {
+            let newScore = 0;
+
             if(word.length === 4) {
-                setScore(score + 1);
+                newScore = score + 1;
             }
             else {
-                let newScore = score + word.length;
+                newScore = score + word.length;
 
                 // if word is a pangram, add 7 points
                 if(isPangram(word)) {
                     newScore += 7;
                 }
-
-                setScore(newScore);
             }
+
+            setScore(newScore);
+
+            // update score and words found in cookie
+            let cookies = parse(document.cookie);
+            let puzzleData = JSON.parse(cookies[selectedPuzzleId]);
+            puzzleData.score = newScore;
+            puzzleData.words.push(word);
+
+            document.cookie = serialize(selectedPuzzleId, JSON.stringify(puzzleData));
 
             // add to correct guesses
             setCorrectGuesses(guesses => [...guesses, word].sort());
