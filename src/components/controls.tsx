@@ -32,6 +32,19 @@ function Controls({centLetter, letters, checkWordCallback}: {centLetter: string,
         setInput(val => val.substring(0, val.length - 1));
     }
 
+    const scrambleLetters = () => {
+        let currentLetters = outerLetters;
+        let shuffled = [];
+
+        while(currentLetters!.length > 0) {
+            let index = Math.floor(Math.random() * currentLetters!.length);
+            shuffled.push(currentLetters![index]);
+            currentLetters!.splice(index, 1);
+        }
+
+        setOuterLetters(shuffled);
+    }
+
     return (
         <div key={ centLetter }>
             { getFormattedInput() }
@@ -49,6 +62,7 @@ function Controls({centLetter, letters, checkWordCallback}: {centLetter: string,
                     <br />
                     <br />
                     <button onClick={ deleteChar } className="side-margins">delete</button>
+                    <button onClick={ scrambleLetters }>&#8634;</button>
                     <button onClick={ checkWord } className="side-margins">enter</button>
                 </div>
                 :
