@@ -41,3 +41,8 @@
   margin-left: 1vw;
   margin-right: 1vw;
 }
+
+.small-margin-bottom {
+  margin-bottom: 1vh;
+  margin-top: 1vh;
+}

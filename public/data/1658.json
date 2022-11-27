@@ -1,6 +1,7 @@
 {
     "centerLetter": "e",
     "outerLetters": ["b", "c", "d", "o", "t", "y"],
+    "maxScore": 208,
     "words": [
         "bedded",
         "beet",

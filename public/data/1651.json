@@ -1,6 +1,7 @@
 {
     "centerLetter": "a",
     "outerLetters": ["b", "c", "e", "h", "l", "w"],
+    "maxScore": 138,
     "words": [
         "able",
         "ache",

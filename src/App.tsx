@@ -75,7 +75,7 @@ function App() {
             }
 
             // add to correct guesses
-            setCorrectGuesses(guesses => [...guesses, word]);
+            setCorrectGuesses(guesses => [...guesses, word].sort());
         }
         else {
             alert('not in word list');
@@ -90,7 +90,9 @@ function App() {
                 <option value="1658">1658</option>
             </select>
 
-            <h1>Score: { score }</h1>
+            <h1 className="small-margin-bottom">Score: { score }</h1>
+            <h3 className="small-margin-bottom">Target score: { Math.floor(data?.maxScore as number * 0.7) }</h3>
+            <h3 className="small-margin-bottom">Possible words: { data?.words.length }</h3>
             <hr />
             <br />
             { data ? 
@@ -99,7 +101,7 @@ function App() {
 
                     <br />
                     <hr />
-                    <h2>Words found</h2>
+                    <h2>Words found { correctGuesses.length }</h2>
                     <ul style={ {textAlign: 'left', fontSize: '2vh'} }>
                     { correctGuesses.map(word => <li key={ word }>{ word }</li>) }
                     </ul>

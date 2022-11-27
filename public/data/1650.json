@@ -1,6 +1,7 @@
 {
     "centerLetter": "c",
     "outerLetters": ["d", "e", "i", "n", "t", "v"],
+    "maxScore": 306,
     "words": [
         "cede",
         "ceded",
