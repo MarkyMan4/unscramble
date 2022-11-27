@@ -24,6 +24,14 @@ function Controls({centLetter, letters, checkWordCallback}: {centLetter: string,
         setInput('');
     }
 
+    const deleteChar = () => {
+        if(input.length === 0) {
+            return;
+        }
+
+        setInput(val => val.substring(0, val.length - 1));
+    }
+
     return (
         <div key={ centLetter }>
             { getFormattedInput() }
@@ -40,7 +48,7 @@ function Controls({centLetter, letters, checkWordCallback}: {centLetter: string,
                     <div onClick={ () => setInput(input + outerLetters[5]) } className="letter-btn">{ outerLetters[5] }</div> 
                     <br />
                     <br />
-                    <button onClick={ () => setInput('') } className="side-margins">clear</button>
+                    <button onClick={ deleteChar } className="side-margins">delete</button>
                     <button onClick={ checkWord } className="side-margins">enter</button>
                 </div>
                 :
