@@ -32,14 +32,24 @@ function App() {
         setCorrectGuesses([]);
 
         let cookies = parse(document.cookie);
-        console.log(cookies);
+        // console.log(cookies);
+        // console.log(document.cookie);
         if(selectedPuzzleId in cookies) {
             let puzzleData = JSON.parse(cookies[selectedPuzzleId]);
             setScore(puzzleData.score);
             setCorrectGuesses(puzzleData.words);
         }
         else {
-            document.cookie = serialize(selectedPuzzleId, JSON.stringify({score: 0, words: []}));
+            document.cookie = serialize(
+                selectedPuzzleId, 
+                JSON.stringify({score: 0, words: []}),
+                {expires: new Date(2022, 11, 30)}
+            );
+            console.log(serialize(
+                selectedPuzzleId, 
+                JSON.stringify({score: 0, words: []}),
+                // {expires: new Date(2100, 0, 1)}
+            ));
         }
     }, [selectedPuzzleId])
 
@@ -94,7 +104,11 @@ function App() {
             puzzleData.score = newScore;
             puzzleData.words.push(word);
 
-            document.cookie = serialize(selectedPuzzleId, JSON.stringify(puzzleData));
+            document.cookie = serialize(
+                selectedPuzzleId, 
+                JSON.stringify(puzzleData),
+                {expires: new Date(2022, 11, 30)}
+            );
 
             // add to correct guesses
             setCorrectGuesses(guesses => [...guesses, word].sort());
