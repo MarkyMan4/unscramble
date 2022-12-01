@@ -3,6 +3,7 @@ import Controls from './components/controls'
 import './App.css'
 import LetterData from './dataTypes/letterData'
 import { parse, serialize } from 'cookie';
+import 'animate.css';
 
 
 // this is temporary, I'll remove it once I automate daily collection of puzzles
@@ -125,7 +126,7 @@ function App() {
                 { availablePuzzles.map(p => <option value={ p }>{ p }</option>) }
             </select>
 
-            <h1 className="small-margin-bottom">Score: { score }</h1>
+            <h1 className="small-margin-bottom animate__animated animate__pulse" key={ score }>Score: <span>{ score }</span></h1>
             <h3 className="small-margin-bottom">Target score: { Math.floor(data?.maxScore as number * 0.7) }</h3>
             <h3 className="small-margin-bottom">Possible words: { data?.words.length }</h3>
             <hr />

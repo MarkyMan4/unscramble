@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-// import LetterData from '../dataTypes/letterData'
+import OuterLetterButton from "./outerLetterButton";
 
 function Controls({centLetter, letters, checkWordCallback}: {centLetter: string, letters: string[], checkWordCallback: (word: string) => void} ) {
     const [input, setInput] = useState('');
@@ -45,20 +45,24 @@ function Controls({centLetter, letters, checkWordCallback}: {centLetter: string,
         setOuterLetters(shuffled);
     }
 
+    const updateInput = (letter: string) => {
+        setInput(input + letter);
+    }
+
     return (
         <div key={ centLetter }>
             { getFormattedInput() }
             { outerLetters ? 
                 <div>
-                    <div onClick={ () => setInput(input + outerLetters[0]) } className="letter-btn">{ outerLetters[0] }</div>
-                    <div onClick={ () => setInput(input + outerLetters[1]) } className="letter-btn">{ outerLetters[1] }</div> 
+                    <OuterLetterButton letter={ outerLetters[0] } callbackFn={ updateInput } />
+                    <OuterLetterButton letter={ outerLetters[1] } callbackFn={ updateInput } />
                     <br />
-                    <div onClick={ () => setInput(input + outerLetters[2]) } className="letter-btn">{ outerLetters[2] }</div>
+                    <OuterLetterButton letter={ outerLetters[2] } callbackFn={ updateInput } />
                     <div onClick={ () => setInput(input + centerLetter) } className="letter-btn center-letter">{ centerLetter }</div> 
-                    <div onClick={ () => setInput(input + outerLetters[3]) } className="letter-btn">{ outerLetters[3] }</div>
+                    <OuterLetterButton letter={ outerLetters[3] } callbackFn={ updateInput } />
                     <br />
-                    <div onClick={ () => setInput(input + outerLetters[4]) } className="letter-btn">{ outerLetters[4] }</div>
-                    <div onClick={ () => setInput(input + outerLetters[5]) } className="letter-btn">{ outerLetters[5] }</div> 
+                    <OuterLetterButton letter={ outerLetters[4] } callbackFn={ updateInput } />
+                    <OuterLetterButton letter={ outerLetters[5] } callbackFn={ updateInput } />
                     <br />
                     <br />
                     <button onClick={ deleteChar } className="side-margins">delete</button>
