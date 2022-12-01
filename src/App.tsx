@@ -4,6 +4,14 @@ import './App.css'
 import LetterData from './dataTypes/letterData'
 import { parse, serialize } from 'cookie';
 
+
+// this is temporary, I'll remove it once I automate daily collection of puzzles
+const availablePuzzles: number[] = [];
+
+for(let i = 1650; i <= 1667; i++) {
+    availablePuzzles.push(i);
+}
+
 const getData = async (puzzleId: string): Promise<any> => {
     return fetch(
         `data/${puzzleId}.json`, 
@@ -32,8 +40,6 @@ function App() {
         setCorrectGuesses([]);
 
         let cookies = parse(document.cookie);
-        // console.log(cookies);
-        // console.log(document.cookie);
         if(selectedPuzzleId in cookies) {
             let puzzleData = JSON.parse(cookies[selectedPuzzleId]);
             setScore(puzzleData.score);
@@ -45,11 +51,6 @@ function App() {
                 JSON.stringify({score: 0, words: []}),
                 {expires: new Date(2100, 0, 1)}
             );
-            console.log(serialize(
-                selectedPuzzleId, 
-                JSON.stringify({score: 0, words: []}),
-                // {expires: new Date(2100, 0, 1)}
-            ));
         }
     }, [selectedPuzzleId])
 
@@ -121,10 +122,7 @@ function App() {
     return (
         <div>
             <select onChange={ event => setSelectedPuzzle(event.target.value) }>
-                <option value="1650">1650</option>
-                <option value="1651">1651</option>
-                <option value="1658">1658</option>
-                <option value="1663">1663</option>
+                { availablePuzzles.map(p => <option value={ p }>{ p }</option>) }
             </select>
 
             <h1 className="small-margin-bottom">Score: { score }</h1>
