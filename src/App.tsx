@@ -13,6 +13,8 @@ for(let i = 1650; i <= 1667; i++) {
     availablePuzzles.push(i);
 }
 
+availablePuzzles.reverse();
+
 const getData = async (puzzleId: string): Promise<any> => {
     return fetch(
         `data/${puzzleId}.json`, 
@@ -30,7 +32,7 @@ const getData = async (puzzleId: string): Promise<any> => {
 }
 
 function App() {
-    const [selectedPuzzleId, setSelectedPuzzle] = useState<string>('1650');
+    const [selectedPuzzleId, setSelectedPuzzle] = useState<string>(availablePuzzles[0].toString());
     const [data, setData] = useState<LetterData>();
     const [score, setScore] = useState<number>(0);
     const [correctGuesses, setCorrectGuesses] = useState<string[]>([]);
