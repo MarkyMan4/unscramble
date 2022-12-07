@@ -4,12 +4,14 @@ import './App.css'
 import LetterData from './dataTypes/letterData'
 import { parse, serialize } from 'cookie';
 import 'animate.css';
+import { ToastContainer, Zoom, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 // this is temporary, I'll remove it once I automate daily collection of puzzles
 const availablePuzzles: number[] = [];
 
-for(let i = 1650; i <= 1671; i++) {
+for(let i = 1650; i <= 1672; i++) {
     availablePuzzles.push(i);
 }
 
@@ -77,13 +79,13 @@ function App() {
 
     const checkWord = (word: string) => {
         if(correctGuesses.includes(word)) {
-            alert('already found');
+            toast('Already found!', {type: 'warning'});
         }
         else if(word.length < 4) {
-            alert('too short');
+            toast('Too short!', {type: 'warning'});
         }
         else if(!word.includes(data!.centerLetter)) {
-            alert('missing center letter');
+            toast('Missing center letter!', {type: 'warning'});
         }
         else if(data?.words?.includes(word)) {
             let newScore = 0;
@@ -98,6 +100,13 @@ function App() {
                 if(isPangram(word)) {
                     newScore += 7;
                 }
+            }
+
+            if(isPangram(word)) {
+                toast('Pangram!')
+            }
+            else {
+                toast('Nice!', {type: 'success'})
             }
 
             setScore(newScore);
@@ -118,20 +127,27 @@ function App() {
             setCorrectGuesses(guesses => [...guesses, word].sort());
         }
         else {
-            alert('not in word list');
+            toast('Not in word list!', {type: 'warning'});
         }        
     }
 
     return (
         <div>
             <select onChange={ event => setSelectedPuzzle(event.target.value) }>
-                { availablePuzzles.map(p => <option value={ p }>{ p }</option>) }
+                { availablePuzzles.map(p => <option key={ p } value={ p }>{ p }</option>) }
             </select>
 
             <h1 className="small-margin-bottom animate__animated animate__pulse" key={ score }>Score: <span>{ score }</span></h1>
             <h3 className="small-margin-bottom">Target score: { Math.floor(data?.maxScore as number * 0.7) }</h3>
             <h3 className="small-margin-bottom">Possible words: { data?.words.length }</h3>
             <hr />
+            <ToastContainer 
+                position="top-center" 
+                pauseOnHover={false}
+                theme="light"
+                autoClose={2000}
+                transition={Zoom}
+            />
             <br />
             { data ? 
                 <div>
