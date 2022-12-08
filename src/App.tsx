@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // this is temporary, I'll remove it once I automate daily collection of puzzles
 const availablePuzzles: number[] = [];
 
-for(let i = 1650; i <= 1672; i++) {
+for(let i = 1650; i <= 1674; i++) {
     availablePuzzles.push(i);
 }
 
