@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import Controls from './components/controls'
 import './App.css'
 import LetterData from './dataTypes/letterData'
@@ -6,41 +6,31 @@ import { parse, serialize } from 'cookie';
 import 'animate.css';
 import { ToastContainer, Zoom, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Triangle } from  'react-loader-spinner'
+import { listPuzzles, retrievePuzzle } from './api/dataRetrieval';
 
-
-// this is temporary, I'll remove it once I automate daily collection of puzzles
-const availablePuzzles: number[] = [];
-
-for(let i = 1650; i <= 1676; i++) {
-    availablePuzzles.push(i);
-}
-
-availablePuzzles.reverse();
-
-const getData = async (puzzleId: string): Promise<any> => {
-    return fetch(
-        `data/${puzzleId}.json`, 
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        }
-    ).then(res => {
-        return res.json();
-    }).then(jsonData => {
-        return jsonData;
-    })
-}
 
 function App() {
-    const [selectedPuzzleId, setSelectedPuzzle] = useState<string>(availablePuzzles[0].toString());
+    const [availablePuzzles, setAvailablePuzzles] = useState<number[]>([]);
+    const [selectedPuzzleId, setSelectedPuzzle] = useState<string>('1');
     const [data, setData] = useState<LetterData>();
     const [score, setScore] = useState<number>(0);
     const [correctGuesses, setCorrectGuesses] = useState<string[]>([]);
 
     useEffect(() => {
-        getData(selectedPuzzleId).then(res => setData(res));
+        listPuzzles().then(res => {
+            let ids = res as number[];
+            setAvailablePuzzles(ids);
+            setSelectedPuzzle(ids[0].toString());
+        });
+    }, []);
+
+    useEffect(() => {
+        if(!selectedPuzzleId) {
+            return;
+        }
+
+        retrievePuzzle(selectedPuzzleId).then(res => setData(res));
         setScore(0);
         setCorrectGuesses([]);
 
@@ -131,40 +121,57 @@ function App() {
         }        
     }
 
-    return (
-        <div>
-            <select onChange={ event => setSelectedPuzzle(event.target.value) }>
-                { availablePuzzles.map(p => <option key={ p } value={ p }>{ p }</option>) }
-            </select>
+    const getDisplay = (): ReactElement => {
+        if(availablePuzzles.length === 0) {
+            return (
+                <Triangle
+                    height="80"
+                    width="80"
+                    color="rgb(12, 131, 243)"
+                    ariaLabel="triangle-loading"
+                    wrapperStyle={{}}
+                    visible={true}
+              />
+            )
+        }
+        
+        return (
+            <div>
+                <select onChange={ event => setSelectedPuzzle(event.target.value) }>
+                    { availablePuzzles?.map(p => <option key={ p } value={ p }>{ p }</option>) }
+                </select>
+    
+                <h1 className="small-margin-bottom animate__animated animate__pulse" key={ score }>Score: <span>{ score }</span></h1>
+                <h3 className="small-margin-bottom">Target score: { Math.floor(data?.maxScore as number * 0.7) }</h3>
+                <h3 className="small-margin-bottom">Possible words: { data?.words.length }</h3>
+                <hr />
+                <ToastContainer 
+                    position="top-center" 
+                    pauseOnHover={false}
+                    theme="light"
+                    autoClose={2000}
+                    transition={Zoom}
+                />
+                <br />
+                { data ? 
+                    <div>
+                        <Controls centLetter={ data.centerLetter } letters={ data.outerLetters } checkWordCallback={ checkWord } />
+    
+                        <br />
+                        <hr />
+                        <h2>Words found { correctGuesses.length }</h2>
+                        <ul style={ {textAlign: 'left', fontSize: '2vh'} }>
+                        { correctGuesses.map(word => <li key={ word }>{ word }</li>) }
+                        </ul>
+                    </div>
+                    :
+                    <div></div>
+                }
+            </div>
+        )
+    }
 
-            <h1 className="small-margin-bottom animate__animated animate__pulse" key={ score }>Score: <span>{ score }</span></h1>
-            <h3 className="small-margin-bottom">Target score: { Math.floor(data?.maxScore as number * 0.7) }</h3>
-            <h3 className="small-margin-bottom">Possible words: { data?.words.length }</h3>
-            <hr />
-            <ToastContainer 
-                position="top-center" 
-                pauseOnHover={false}
-                theme="light"
-                autoClose={2000}
-                transition={Zoom}
-            />
-            <br />
-            { data ? 
-                <div>
-                    <Controls centLetter={ data.centerLetter } letters={ data.outerLetters } checkWordCallback={ checkWord } />
-
-                    <br />
-                    <hr />
-                    <h2>Words found { correctGuesses.length }</h2>
-                    <ul style={ {textAlign: 'left', fontSize: '2vh'} }>
-                    { correctGuesses.map(word => <li key={ word }>{ word }</li>) }
-                    </ul>
-                </div>
-                :
-                <div></div>
-            }
-        </div>
-    )
+    return getDisplay()
 }
 
 export default App
